@@ -231,13 +231,23 @@ class DamcoTrackingAutomation:
                 df = pd.read_csv(file_path)
             elif ext in [".xls", ".xlsx"]:
                 self.logger.info("📊 Reading as Excel file...")
-                # Try different engines for Excel files
-                try:
-                    df = pd.read_excel(file_path, engine='openpyxl')
-                except Exception as e:
-                    self.logger.warning(f"⚠️ openpyxl failed, trying xlrd: {e}")
-                    df = pd.read_excel(file_path, engine='xlrd')
-                df = pd.read_excel(file_path)
+                # Try different engines for Excel files based on format
+                if ext == ".xlsx":
+                    try:
+                        df = pd.read_excel(file_path, engine='openpyxl')
+                    except Exception as e:
+                        self.logger.warning(f"⚠️ openpyxl failed for .xlsx: {e}")
+                        df = pd.read_excel(file_path)  # Use default engine
+                else:  # .xls files
+                    try:
+                        df = pd.read_excel(file_path, engine='xlrd')
+                    except Exception as e:
+                        self.logger.warning(f"⚠️ xlrd failed for .xls: {e}")
+                        try:
+                            df = pd.read_excel(file_path, engine='openpyxl')
+                        except Exception as e2:
+                            self.logger.warning(f"⚠️ openpyxl also failed: {e2}")
+                            df = pd.read_excel(file_path)  # Use default engine
             else:
                 raise ValueError(f"Unsupported file type: {ext}. Please use .csv or .xlsx")
             

@@ -10,7 +10,7 @@
     "start": "node server/index.cjs",
     "build": "vite build",
     "preview": "vite preview",
-    "install-deps": "npm install && pip3 install selenium pandas openpyxl beautifulsoup4 requests webdriver-manager",
+    "install-deps": "npm install && pip3 install selenium pandas openpyxl xlrd beautifulsoup4 requests webdriver-manager",
     "lint": "eslint ."
   },
   "dependencies": {
