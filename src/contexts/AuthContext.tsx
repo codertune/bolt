@@ -153,12 +153,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const loadedSettings = JSON.parse(savedSettings);
         console.log('✅ Loaded saved settings with', loadedSettings.enabledServices?.length || 0, 'enabled services');
+        console.log('📋 Loaded enabled services:', loadedSettings.enabledServices);
         setCreditSettings(loadedSettings);
       } catch (e) {
         console.error('Error loading settings data:', e);
       }
     } else {
       console.log('⚠️ No saved settings found, will use and save default settings');
+      // Save default settings immediately if none exist
+      localStorage.setItem('creditSettings', JSON.stringify(creditSettings));
     }
   }, []);
 
@@ -369,7 +372,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     console.log('🔄 toggleService called for:', serviceId);
     console.log('📋 Current enabled services:', creditSettings.enabledServices);
     
-    setCreditSettings(prevSettings => {
+    const newSettings = { ...creditSettings };
       const currentServices = prevSettings.enabledServices || [];
       const isCurrentlyEnabled = currentServices.includes(serviceId);
       
@@ -380,7 +383,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log('🔄 Service', serviceId, isCurrentlyEnabled ? 'DISABLED' : 'ENABLED');
       console.log('📋 New enabled services:', newEnabledServices);
       
-      const newSettings = { ...prevSettings, enabledServices: newEnabledServices };
+      newSettings.enabledServices = newEnabledServices;
       
       // Force immediate localStorage save
       try {
@@ -390,12 +393,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error('❌ Failed to save settings to localStorage:', error);
       }
       
-      return newSettings;
-    });
+    setCreditSettings(newSettings);
   };
 
   const isServiceEnabled = (serviceId: string) => {
     const enabled = creditSettings.enabledServices?.includes(serviceId) || false;
+    console.log('🔍 isServiceEnabled check:', serviceId, '=', enabled);
+    console.log('📋 Current enabledServices array:', creditSettings.enabledServices);
     return enabled;
   };
 
