@@ -499,7 +499,7 @@ app.post('/api/automation/start', async (req, res) => {
     activeProcesses.set(processId, processData);
 
     // Start the automation script
-    startAutomationScript(processId, serviceId, files, userCredentials, parameters);
+    await startAutomationScript(processId, serviceId, files, userCredentials, parameters);
 
     res.json({
       success: true,
