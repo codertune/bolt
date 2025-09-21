@@ -373,7 +373,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     console.log('📋 Current enabled services:', creditSettings.enabledServices);
     
     const newSettings = { ...creditSettings };
-      const currentServices = prevSettings.enabledServices || [];
+      const currentServices = creditSettings.enabledServices || [];
       const isCurrentlyEnabled = currentServices.includes(serviceId);
       
       const newEnabledServices = isCurrentlyEnabled
