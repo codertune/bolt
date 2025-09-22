@@ -11,6 +11,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "install-deps": "npm install && python3 -m pip install selenium pandas openpyxl xlrd beautifulsoup4 requests webdriver-manager",
+    "install-ubuntu-deps": "sudo apt update && sudo apt install -y python3 python3-pip google-chrome-stable chromedriver && python3 -m pip install --user selenium pandas openpyxl xlrd beautifulsoup4 requests webdriver-manager",
     "lint": "eslint ."
   },
   "dependencies": {
